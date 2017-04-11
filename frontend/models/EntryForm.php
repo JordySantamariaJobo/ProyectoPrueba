@@ -17,6 +17,6 @@
 				['email', 'email'],
 			];
 		}
-		//loleros.compact(varname)
+		//loleros.compact()
 	}
 ?>
