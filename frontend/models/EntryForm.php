@@ -17,6 +17,10 @@
 				['email', 'email'],
 			];
 		}
-		//loleros.compact(aqwerty)
+		public function send()
+		{
+			//dsdfghjkl
+		}
+		//loleros.compact()
 	}
 ?>
