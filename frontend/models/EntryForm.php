@@ -17,6 +17,6 @@
 				['email', 'email'],
 			];
 		}
-		//loleros
+		//loleros.com
 	}
 ?>
