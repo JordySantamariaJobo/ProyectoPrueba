@@ -27,5 +27,12 @@
 				'activo' => 1,
 			])->execute();
 		}
+
+		public function Usuarios()
+		{
+			$user = $connection->createCommand('SELECT * FROM Usuario')->queryAll();
+
+			return $user;
+		}
 	}
 ?>

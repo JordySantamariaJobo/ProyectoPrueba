@@ -226,6 +226,7 @@ class SiteController extends Controller
             return $this->render('entry-confirm', ['model' => $model]);
         } else {
             return $this->render('entry', ['model'=>$model]);
+            $model->Usuarios();
         }
     }
 }

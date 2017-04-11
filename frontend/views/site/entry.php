@@ -34,6 +34,26 @@
 <div class="form-group">
 	<?= Html::submitButton("Ingresar", ['class' => 'btn btn-primary btn-ingresar']) ?>
 </div>
+<table class="table table">
+    <caption>Usuarios registrados en la base de datos</caption>
+    <thead>
+        <tr>
+            <th>Nombre(s)</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= Html::encode($model->name) ?></td>
+            <td><?= Html::encode($model->app) ?></td>
+            <td><?= Html::encode($model->apm) ?></td>
+        </tr>
+    </tbody>
+</table>
+<?php
+    print_r($model);
+?>
 <style>
 	.btn-ingresar{
 		width: 100%;
