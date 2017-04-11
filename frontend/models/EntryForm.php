@@ -17,6 +17,7 @@
 				['email', 'email'],
 			];
 		}
+		
 		public function send()
 		{
 			//dsdfghjkl
