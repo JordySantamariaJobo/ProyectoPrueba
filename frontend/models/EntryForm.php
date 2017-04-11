@@ -17,6 +17,6 @@
 				['email', 'email'],
 			];
 		}
-		//loleros.compact(aqwerty)
+		//loleros.compact(HolaJobo)
 	}
 ?>
