@@ -17,6 +17,6 @@
 				['email', 'email'],
 			];
 		}
-		//loleros.compact()
+		//loleros.compact(aqwerty)
 	}
 ?>
