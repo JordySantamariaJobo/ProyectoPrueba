@@ -10,7 +10,7 @@
            	'class' => 'form-control transparent'
         ]
     	])->textInput()->input('text', [
-     		'placeholder' => "Ingresa tu nombre"
+     		'placeholder' => "Nombre..."
      	])->label(false);
 ?>
 <?= 
@@ -20,7 +20,7 @@
            	'class' => 'form-control transparent'
         ]
     	])->textInput()->input('text', [
-     		'placeholder' => "Ingresa tu correo"
+     		'placeholder' => "Correo..."
      	])->label(false);
 ?>
 <?= 
@@ -30,7 +30,7 @@
            	'class' => 'form-control transparent'
         ]
     	])->textInput()->input('text', [
-     		'placeholder' => "Ingresa tu correo"
+     		'placeholder' => "Apellidos..."
      	])->label(false);
 ?>
 <div class="form-group">

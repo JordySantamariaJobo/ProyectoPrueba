@@ -221,10 +221,10 @@ class SiteController extends Controller
     {
         $model = new EntryForm();
 
-        print_r('<pre>');
+        /*print_r('<pre>');
         print_r($model);
         print_r('</pre>');
-        exit();
+        exit();*/
 
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
