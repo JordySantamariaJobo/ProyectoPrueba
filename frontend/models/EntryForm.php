@@ -13,9 +13,10 @@
 		public function rules()
 		{
 			return[
-				[['name','email', 'lol'], 'required'],
+				[['name','email', 'apellido'], 'required'],
 				['email', 'email'],
 			];
 		}
+		//loleros
 	}
 ?>
