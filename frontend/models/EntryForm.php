@@ -3,25 +3,29 @@
 
 	use Yii;
 	use yii\base\Model;
+	use yii\db\ActiveRecord;
 
 	class EntryForm extends Model
 	{
 		public $name;
-		public $email;
-		public $apellido;
+		public $app;
+		public $apm;
 
 		public function rules()
 		{
 			return[
-				[['name','email', 'apellido'], 'required'],
-				['email', 'email'],
+				[['name','app', 'apm'], 'required'],
 			];
 		}
-		
-		public function send()
+
+		public function saveAs()
 		{
-			//dsdfghjkl
+			yii::$app->db->createCommand()->insert('Usuario', [
+				'nombre' => $this->name,
+				'app' => $this->app,
+				'apm' => $this->apm,
+				'activo' => 1,
+			])->execute();
 		}
-		//loleros.compact()
 	}
 ?>

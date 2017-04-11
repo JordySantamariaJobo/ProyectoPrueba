@@ -3,7 +3,7 @@
 ?>
 <p>Esta es la informacion que tu ingresaste:</p>
 <ul>
-	<li><label>Nombre:</label> <?= Html::encode($model->name) ?></li>
-	<li><label>Correo:</label> <?= Html::encode($model->email) ?></li>
-	<li><label>Apellidos:</label> <?= Html::encode($model->apellido) ?></li>
+	<li><label>Nombre Completo:</label> <?= Html::encode($model->name) ?></li>
+	<li><label>Apellido Paterno:</label> <?= Html::encode($model->app) ?></li>
+	<li><label>Apellido Materno:</label> <?= Html::encode($model->apm) ?></li>
 </ul>
