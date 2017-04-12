@@ -24,13 +24,50 @@ use yii\helpers\Url;
  */
 class SiteController extends Controller
 {
+    public function actionUpdate()
+    {
+        $model = new FormAlumnos;
+        $msg = null;
+        
+        if($model->load(Yii::$app->request->post()))
+        {
+            if($model->validate())
+            {
+                $table = Alumnos::findOne($model->id_alumno);
+                if($table)
+                {
+                    $table->nombre = $model->nombre;
+                    $table->apellidos = $model->apellidos;
+                    $table->clase = $model->clase;
+                    $table->nota_final = $model->nota_final;
+                    if ($table->update())
+                    {
+                        $msg = "El Alumno ha sido actualizado correctamente";
+                    }
+                    else
+                    {
+                        $msg = "El Alumno no ha podido ser actualizado";
+                    }
+                }
+                else
+                {
+                    $msg = "El alumno seleccionado no ha sido encontrado";
+                }
+            }
+            else
+            {
+                $model->getErrors();
+            }
+        }
+    }
+
     public function actionDelete()
     {
         if (Yii::$app->request->post()) {
             $id_alumno = Html::encode($_POST["id_alumno"]);
             if ((int) $id_alumno) {
                 if (Alumnos::deleteAll("id_alumno=:id_alumno", ["id_alumno" => $id_alumno])) {
-                    Yii::$app->session->setFlash('success',"Usuario eliminado correctamente!");
+                    Yii::$app->session->setFlash('success',"The Student has been successfully removed!");
                     return $this->redirect('/yii-aplication/frontend/web/index.php?r=site%2Fview',302);
                 }
                 else
@@ -87,7 +124,7 @@ class SiteController extends Controller
 
                 if ($table->insert()) {
 
-                    Yii::$app->session->setFlash('success',"Usuario registrado correctamente!");
+                    Yii::$app->session->setFlash('success',"Student successfully registered!");
                     $model->nombre = null;
                     $model->apellidos = null;
                     $model->clase = null;

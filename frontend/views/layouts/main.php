@@ -36,8 +36,8 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Alta', 'url' => ['/site/create']],
-        ['label' => 'Consulta', 'url' => ['/site/view']],
+        ['label' => 'Register', 'url' => ['/site/create']],
+        ['label' => 'Query', 'url' => ['/site/view']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
