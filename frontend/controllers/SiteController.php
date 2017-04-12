@@ -18,7 +18,7 @@ use frontend\models\Alumnos;
 use frontend\models\FormSearch;
 use yii\helpers\Html;
 use yii\helpers\Url;
-
+use yii\data\ActiveDataProvider;
 /**
  * Site controller
  */
@@ -28,37 +28,9 @@ class SiteController extends Controller
     {
         $model = new FormAlumnos;
         $msg = null;
-        
-        if($model->load(Yii::$app->request->post()))
-        {
-            if($model->validate())
-            {
-                $table = Alumnos::findOne($model->id_alumno);
-                if($table)
-                {
-                    $table->nombre = $model->nombre;
-                    $table->apellidos = $model->apellidos;
-                    $table->clase = $model->clase;
-                    $table->nota_final = $model->nota_final;
-                    if ($table->update())
-                    {
-                        $msg = "El Alumno ha sido actualizado correctamente";
-                    }
-                    else
-                    {
-                        $msg = "El Alumno no ha podido ser actualizado";
-                    }
-                }
-                else
-                {
-                    $msg = "El alumno seleccionado no ha sido encontrado";
-                }
-            }
-            else
-            {
-                $model->getErrors();
-            }
-        }
+        $alumno_id = Yii::$app->request->get('id_alumno');
+
+        $table = Alumnos::findOne($alumno_id);
     }
 
     public function actionDelete()
@@ -91,6 +63,11 @@ class SiteController extends Controller
     public function actionView()
     {
         $table = new Alumnos;
+        $dataProvider = new ActiveDataProvider([
+            'query' => Alumnos::find()->orderBy(['id_alumno'=>SORT_DESC]),
+        ]);
+        /*print_r($dataProvider);
+        exit();*/
         $model = $table->find()->orderBy(['id_alumno'=>SORT_DESC])->all(); //Con order by
         //$model = Alumnos::find()->all(); //Trae todos los datos
         $form = new FormSearch;
@@ -106,7 +83,7 @@ class SiteController extends Controller
                 $form->getErrors();
             }
         }
-        return $this->render("view", ["model" => $model, "form" => $form, "search" => $search]);
+        return $this->render("view", ["model" => $model, "form" => $form, "search" => $search, 'dataProvider' => $dataProvider]);
     }
 
     public function actionCreate()
