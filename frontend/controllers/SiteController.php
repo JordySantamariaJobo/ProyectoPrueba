@@ -13,15 +13,90 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use frontend\models\ValidarFormulario;
+use frontend\models\FormAlumnos;
+use frontend\models\Alumnos;
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
+    public function actionCreate()
+    {
+        $model = new FormAlumnos;
+        $msg = null;
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+
+                $table = new Alumnos;
+                $table->nombre = $model->nombre;
+                $table->apellidos = $model->apellidos;
+                $table->clase = $model->clase;
+                $table->nota_final = $model->nota_final;
+
+                if ($table->insert()) {
+
+                    $msg = "Registro correcto";
+                    $model->nombre = null;
+                    $model->apellidos = null;
+                    $model->clase = null;
+                    $model->nota_final = null;
+                    
+                }
+                else {
+                    $msg = "Ha ocurrido un error al insertar el registro";
+                }
+            }
+            else
+            {
+                $model->getErrors();
+            }
+        }
+        return $this->render("create", ['model' => $model, 'msg' => $msg]);
+    }
+
+    public function actionSaluda($get = "Tutorial Yii")
+    {
+        $mensaje = "Hola Mundo";
+        $numeros = [0, 1, 2, 3, 4, 5];
+        return $this->render("saluda",
+            [
+                "saluda" => $mensaje,
+                "numeros" => $numeros,
+                "get" => $get,
+            ]);
+    }
+
+    public function actionRequest()
+    {
+        $mensaje = null;
+        if (isset($_REQUEST["nombre"])) {
+            $mensaje = "Tu nombre es: ".$_REQUEST["nombre"];
+        }
+        $this->redirect(["site/formulario", "mensaje" => $mensaje]);
+    }
+
+    public function actionFormulario($mensaje = null)
+    {
+        return $this->render("formulario", ["mensaje" => $mensaje]);
+    }
+
+    public function actionValidarformulario()
+    {
+        $model = new ValidarFormulario;
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                //Por ejemplo, consultar en una base de datos.
+            }
+            else
+            {
+                $model->getErrors();
+            }
+        }
+        return $this->render("validarformulario", ["model" => $model]);
+    }
+
     public function behaviors()
     {
         return [
@@ -210,47 +285,5 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
-    }
-
-    public function actionSaluda($get = "Tutorial Yii")
-    {
-        $mensaje = "Hola Mundo";
-        $numeros = [0, 1, 2, 3, 4, 5];
-        return $this->render("saluda",
-            [
-                "saluda" => $mensaje,
-                "numeros" => $numeros,
-                "get" => $get,
-            ]);
-    }
-
-    public function actionRequest()
-    {
-        $mensaje = null;
-        if (isset($_REQUEST["nombre"])) {
-            $mensaje = "Tu nombre es: ".$_REQUEST["nombre"];
-        }
-        $this->redirect(["site/formulario", "mensaje" => $mensaje]);
-    }
-
-    public function actionFormulario($mensaje = null)
-    {
-        return $this->render("formulario", ["mensaje" => $mensaje]);
-    }
-
-    public function actionValidarformulario()
-    {
-        $model = new ValidarFormulario;
-
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->validate()) {
-                //Por ejemplo, consultar en una base de datos.
-            }
-            else
-            {
-                $model->getErrors();
-            }
-        }
-        return $this->render("validarformulario", ["model" => $model]);
     }
 }
