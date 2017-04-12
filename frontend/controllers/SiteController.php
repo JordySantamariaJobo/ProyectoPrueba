@@ -13,6 +13,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use app\models\EntryForm;
+use app\models\Users;
 
 /**
  * Site controller
@@ -212,21 +213,15 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionSay($message = 'hello')
+    public function actionSaluda($get = "Tutorial Yii")
     {
-        return $this->render('say', ['message'=>$message]);
-    }
-
-    public function actionEntry()
-    {
-        $model = new EntryForm();
-        
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
-            $model->saveAs();
-            return $this->render('entry-confirm', ['model' => $model]);
-        } else {
-            return $this->render('entry', ['model'=>$model]);
-            $model->Usuarios();
-        }
+        $mensaje = "Hola Mundo";
+        $numeros = [0, 1, 2, 3, 4, 5];
+        return $this->render("saluda",
+            [
+                "saluda" => $mensaje,
+                "numeros" => $numeros,
+                "get" => $get,
+            ]);
     }
 }
