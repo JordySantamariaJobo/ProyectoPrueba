@@ -12,8 +12,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use app\models\EntryForm;
-use app\models\Users;
+use frontend\models\ValidarFormulario;
 
 /**
  * Site controller
@@ -223,5 +222,35 @@ class SiteController extends Controller
                 "numeros" => $numeros,
                 "get" => $get,
             ]);
+    }
+
+    public function actionRequest()
+    {
+        $mensaje = null;
+        if (isset($_REQUEST["nombre"])) {
+            $mensaje = "Tu nombre es: ".$_REQUEST["nombre"];
+        }
+        $this->redirect(["site/formulario", "mensaje" => $mensaje]);
+    }
+
+    public function actionFormulario($mensaje = null)
+    {
+        return $this->render("formulario", ["mensaje" => $mensaje]);
+    }
+
+    public function actionValidarformulario()
+    {
+        $model = new ValidarFormulario;
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                //Por ejemplo, consultar en una base de datos.
+            }
+            else
+            {
+                $model->getErrors();
+            }
+        }
+        return $this->render("validarformulario", ["model" => $model]);
     }
 }
