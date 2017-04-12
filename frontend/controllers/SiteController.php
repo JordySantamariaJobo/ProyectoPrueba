@@ -15,12 +15,63 @@ use frontend\models\ContactForm;
 use frontend\models\ValidarFormulario;
 use frontend\models\FormAlumnos;
 use frontend\models\Alumnos;
+use frontend\models\FormSearch;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
+    public function actionDelete()
+    {
+        if (Yii::$app->request->post()) {
+            $id_alumno = Html::encode($_POST["id_alumno"]);
+            if ((int) $id_alumno) {
+                if (Alumnos::deleteAll("id_alumno=:id_alumno", ["id_alumno" => $id_alumno])) {
+                    Yii::$app->session->setFlash('success',"Usuario eliminado correctamente!");
+                    return $this->redirect('/yii-aplication/frontend/web/index.php?r=site%2Fview',302);
+                }
+                else
+                {
+                     echo "Ha ocurrido un error al eliminar el alumno, redireccionando ...";
+                     return $this->redirect('/yii-aplication/frontend/web/index.php?r=site%2Fview',302);
+                }
+            }
+            else
+            {
+                echo "Ha ocurrido un error al eliminar el alumno, redireccionando ...";
+                return $this->redirect('/yii-aplication/frontend/web/index.php?r=site%2Fview',302);
+            }
+        }
+        else
+        {
+            return $this->redirect(["site/view"]);
+        }
+    }
+
+    public function actionView()
+    {
+        $table = new Alumnos;
+        $model = $table->find()->orderBy(['id_alumno'=>SORT_DESC])->all(); //Con order by
+        //$model = Alumnos::find()->all(); //Trae todos los datos
+        $form = new FormSearch;
+        $search = null;
+        if ($form->load(Yii::$app->request->get())) {
+            if ($form->validate()) {
+                $search = Html::encode($form->q);
+                $query = "SELECT * FROM alumnos WHERE id_alumno LIKE '%$search%' OR nombre LIKE '%$search%' OR apellidos LIKE '%$search%'";
+                $model = $table->findBySql($query)->all();
+            }
+            else
+            {
+                $form->getErrors();
+            }
+        }
+        return $this->render("view", ["model" => $model, "form" => $form, "search" => $search]);
+    }
+
     public function actionCreate()
     {
         $model = new FormAlumnos;
@@ -36,12 +87,13 @@ class SiteController extends Controller
 
                 if ($table->insert()) {
 
-                    $msg = "Registro correcto";
+                    Yii::$app->session->setFlash('success',"Usuario registrado correctamente!");
                     $model->nombre = null;
                     $model->apellidos = null;
                     $model->clase = null;
                     $model->nota_final = null;
-                    
+                    return $this->redirect('/yii-aplication/frontend/web/index.php?r=site%2Fcreate',302);
+
                 }
                 else {
                     $msg = "Ha ocurrido un error al insertar el registro";
