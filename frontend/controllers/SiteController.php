@@ -24,6 +24,13 @@ use yii\data\ActiveDataProvider;
  */
 class SiteController extends Controller
 {
+    /*public function actionDetails()
+    {
+        $mensaje = "fuck";
+
+        return $this->render("details", ["saluda" => $mensaje]);
+    }*/
+
     public function actionUpdate()
     {
         $model = new FormAlumnos;
@@ -31,33 +38,20 @@ class SiteController extends Controller
         $alumno_id = Yii::$app->request->get('id_alumno');
 
         $table = Alumnos::findOne($alumno_id);
+
+        return $this->render("update", ["model" => $table]);
     }
 
     public function actionDelete()
     {
-        if (Yii::$app->request->post()) {
-            $id_alumno = Html::encode($_POST["id_alumno"]);
-            if ((int) $id_alumno) {
-                if (Alumnos::deleteAll("id_alumno=:id_alumno", ["id_alumno" => $id_alumno])) {
-                    Yii::$app->session->setFlash('success',"The Student has been successfully removed!");
-                    return $this->redirect('/yii-aplication/frontend/web/index.php?r=site%2Fview',302);
-                }
-                else
-                {
-                     echo "Ha ocurrido un error al eliminar el alumno, redireccionando ...";
-                     return $this->redirect('/yii-aplication/frontend/web/index.php?r=site%2Fview',302);
-                }
-            }
-            else
-            {
-                echo "Ha ocurrido un error al eliminar el alumno, redireccionando ...";
-                return $this->redirect('/yii-aplication/frontend/web/index.php?r=site%2Fview',302);
+        if (isset($_GET)) {
+            $id = $_GET['id'];
+            if (Alumnos::deleteAll("id_alumno=:id_alumno", ["id_alumno" => $id])) {
+                Yii::$app->session->setFlash('success',"The Student has been successfully removed!");
             }
         }
-        else
-        {
-            return $this->redirect(["site/view"]);
-        }
+        
+        return $this->redirect(["site/view"]);
     }
 
     public function actionView()
@@ -68,7 +62,7 @@ class SiteController extends Controller
         ]);
         /*print_r($dataProvider);
         exit();*/
-        $model = $table->find()->orderBy(['id_alumno'=>SORT_DESC])->all(); //Con order by
+        $model = Alumnos::findBySql('SELECT * FROM alumnos')->distinct()->all(); //Con order by
         //$model = Alumnos::find()->all(); //Trae todos los datos
         $form = new FormSearch;
         $search = null;
@@ -76,7 +70,7 @@ class SiteController extends Controller
             if ($form->validate()) {
                 $search = Html::encode($form->q);
                 $query = "SELECT * FROM alumnos WHERE id_alumno LIKE '%$search%' OR nombre LIKE '%$search%' OR apellidos LIKE '%$search%'";
-                $model = $table->findBySql($query)->all();
+                //$model = $table->findBySql($query)->all();
             }
             else
             {
