@@ -15,6 +15,7 @@ use frontend\models\ContactForm;
 use frontend\models\ValidarFormulario;
 use frontend\models\FormAlumnos;
 use frontend\models\Alumnos;
+use frontend\models\Profile;
 use frontend\models\FormSearch;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -24,12 +25,25 @@ use yii\data\ActiveDataProvider;
  */
 class SiteController extends Controller
 {
-    /*public function actionDetails()
+    public function actionView()
     {
-        $mensaje = "fuck";
+        $model = new Profile;
 
-        return $this->render("details", ["saluda" => $mensaje]);
-    }*/
+        $id_student = $_GET['id'];
+
+        $msg = "null";
+
+        return $this->render("view", ["msg" => $msg, "query" => $model]);
+    }
+
+    public function actionHelloWidget()
+    {
+        $msg = "My Widget";
+        $numbers = [1,2,3];
+
+        return $this->render("hellowidget", ["msg" => $msg, "numbers" => $numbers]);
+    }
+
 
     public function actionUpdate()
     {
@@ -40,13 +54,13 @@ class SiteController extends Controller
         if ($update->load(Yii::$app->request->post())) {
             if ($update->validate()) {
                 if ($update) {
-                    $query->nombre = $update->nombre;
-                    $query->apellidos = $update->apellidos;
-                    $query->clase = $update->clase;
-                    $query->nota_final = $update->nota_final;
+                    $query->name = $update->name;
+                    $query->last_name = $update->last_name;
+                    $query->class = $update->class;
+                    $query->qualification = $update->qualification;
                     if ($query->update()) {
-                        Yii::$app->session->setFlash('success',"Student successfully updated!");
-                        return $this->redirect(["site/view"]);
+                        Yii::$app->session->setFlash('success',\Yii::t('app', 'Student successfully updated!'));
+                        return $this->redirect(["site/view-students"]);
                     }
                 }
             }
@@ -59,38 +73,27 @@ class SiteController extends Controller
     {
         if (isset($_GET)) {
             $id = $_GET['id'];
-            if (Alumnos::deleteAll("id_alumno=:id_alumno", ["id_alumno" => $id])) {
-                Yii::$app->session->setFlash('success',"The Student has been successfully removed!");
+            if (Alumnos::deleteAll("id_students=:id_students", ["id_students" => $id])) {
+                Yii::$app->session->setFlash("success","<img src='../web/images/zombie.png' class='img-responsive'> The Student has been successfully removed!");
             }
         }
 
-        return $this->redirect(["site/view"]);
+        return $this->redirect(["site/view-students"]);
     }
 
-    public function actionView()
+    public function actionViewStudents()
     {
         $table = new Alumnos;
         $dataProvider = new ActiveDataProvider([
-            'query' => Alumnos::find()->orderBy(['id_alumno'=>SORT_DESC]),
+            'query' => Alumnos::find()->orderBy(['id_students'=>SORT_DESC]),
         ]);
         /*print_r($dataProvider);
         exit();*/
-        $model = Alumnos::findBySql('SELECT * FROM alumnos')->distinct()->all(); //Con order by
+        $model = Alumnos::findBySql('SELECT * FROM students')->distinct()->all(); //Con order by
         //$model = Alumnos::find()->all(); //Trae todos los datos
         $form = new FormSearch;
         $search = null;
-        if ($form->load(Yii::$app->request->get())) {
-            if ($form->validate()) {
-                $search = Html::encode($form->q);
-                $query = "SELECT * FROM alumnos WHERE id_alumno LIKE '%$search%' OR nombre LIKE '%$search%' OR apellidos LIKE '%$search%'";
-                //$model = $table->findBySql($query)->all();
-            }
-            else
-            {
-                $form->getErrors();
-            }
-        }
-        return $this->render("view", ["model" => $model, "form" => $form, "search" => $search, 'dataProvider' => $dataProvider]);
+        return $this->render("viewstudents", ["model" => $model, "form" => $form, "search" => $search, 'dataProvider' => $dataProvider]);
     }
 
     public function actionCreate()
@@ -101,18 +104,18 @@ class SiteController extends Controller
             if ($model->validate()) {
 
                 $table = new Alumnos;
-                $table->nombre = $model->nombre;
-                $table->apellidos = $model->apellidos;
-                $table->clase = $model->clase;
-                $table->nota_final = $model->nota_final;
+                $table->name = $model->name;
+                $table->last_name = $model->last_name;
+                $table->class = $model->class;
+                $table->qualification = $model->qualification;
 
                 if ($table->insert()) {
 
                     Yii::$app->session->setFlash('success',"Student successfully registered!");
-                    $model->nombre = null;
-                    $model->apellidos = null;
-                    $model->clase = null;
-                    $model->nota_final = null;
+                    $model->name = null;
+                    $model->last_name = null;
+                    $model->class = null;
+                    $model->qualification = null;
                     return $this->redirect('/yii-aplication/frontend/web/index.php?r=site%2Fcreate',302);
 
                 }

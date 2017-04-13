@@ -29,20 +29,20 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => \Yii::t('app', 'The School'),
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Register', 'url' => ['/site/create']],
-        ['label' => 'Query', 'url' => ['/site/view']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
+        ['label' => \Yii::t('app', 'Register'), 'url' => ['/site/create']],
+        ['label' => \Yii::t('app', 'Consulta'), 'url' => ['/site/view']],
+        //['label' => 'Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        //$menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
@@ -71,9 +71,9 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; <?php echo \Yii::t('app', 'The School'); ?> <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-right"><?php echo \Yii::t('app', 'Powered By'); ?> Jordy Santamaria</p>
     </div>
 </footer>
 
