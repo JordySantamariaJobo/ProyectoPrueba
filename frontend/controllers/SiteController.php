@@ -33,13 +33,26 @@ class SiteController extends Controller
 
     public function actionUpdate()
     {
-        $model = new FormAlumnos;
-        $msg = null;
-        $alumno_id = Yii::$app->request->get('id_alumno');
+        $update = new FormAlumnos;
+        $alumno_id = $_GET['id'];
+        $query = Alumnos::findOne($alumno_id);
 
-        $table = Alumnos::findOne($alumno_id);
+        if ($update->load(Yii::$app->request->post())) {
+            if ($update->validate()) {
+                if ($update) {
+                    $query->nombre = $update->nombre;
+                    $query->apellidos = $update->apellidos;
+                    $query->clase = $update->clase;
+                    $query->nota_final = $update->nota_final;
+                    if ($query->update()) {
+                        Yii::$app->session->setFlash('success',"Student successfully updated!");
+                        return $this->redirect(["site/view"]);
+                    }
+                }
+            }
+        }
 
-        return $this->render("update", ["model" => $table]);
+        return $this->render("update", ["model" => $query, "update" => $update]);
     }
 
     public function actionDelete()
@@ -50,7 +63,7 @@ class SiteController extends Controller
                 Yii::$app->session->setFlash('success',"The Student has been successfully removed!");
             }
         }
-        
+
         return $this->redirect(["site/view"]);
     }
 
