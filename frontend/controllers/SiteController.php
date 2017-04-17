@@ -15,11 +15,13 @@ use frontend\models\ContactForm;
 use frontend\models\ValidarFormulario;
 use frontend\models\FormAlumnos;
 use frontend\models\Alumnos;
+use frontend\models\Books;
 use frontend\models\Profile;
 use frontend\models\FormSearch;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 /**
  * Site controller
  */
@@ -27,13 +29,9 @@ class SiteController extends Controller
 {
     public function actionView()
     {
-        $model = new Profile;
+        $model = new Books;
 
-        $id_student = $_GET['id'];
-
-        $msg = "null";
-
-        return $this->render("view", ["msg" => $msg, "query" => $model]);
+        return $this->render("view", ['model' => $model]);
     }
 
     public function actionHelloWidget()
